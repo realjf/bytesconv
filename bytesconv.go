@@ -4,7 +4,7 @@
 // # Created Date: 2023/08/11 09:16:46                                         #
 // # Author: realjf                                                            #
 // # -----                                                                     #
-// # Last Modified: 2023/08/11 10:14:00                                        #
+// # Last Modified: 2023/08/15 09:32:17                                        #
 // # Modified By: realjf                                                       #
 // # -----                                                                     #
 // # Copyright (c) 2023                                                        #
@@ -61,288 +61,288 @@ func ToBytes(size int64, unit string) int64 {
 }
 
 // 以1000作为基数
-func ByteCountSI(b int64, precision int) string {
+func ByteCountSI(bytesSize int64, precision int) string {
 	const unit = 1000
-	if b < unit {
-		return fmt.Sprintf("%d B", b)
+	if bytesSize < unit {
+		return fmt.Sprintf("%d B", bytesSize)
 	}
 	div, exp := int64(unit), 0
-	for n := b / unit; n >= unit; n /= unit {
+	for n := bytesSize / unit; n >= unit; n /= unit {
 		div *= unit
 		exp++
 	}
 	prec := "%." + strconv.Itoa(precision) + "f"
-	return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(b)/float64(div)), "kMGTPE"[exp])
+	return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(bytesSize)/float64(div)), "kMGTPE"[exp])
 }
 
 // 以1024作为基数
-func ByteCountIEC(b int64, precision int) string {
+func ByteCountIEC(bytesSize int64, precision int) string {
 	const unit = 1024
-	if b < unit {
-		return fmt.Sprintf("%d B", b)
+	if bytesSize < unit {
+		return fmt.Sprintf("%d B", bytesSize)
 	}
 	div, exp := int64(unit), 0
-	for n := b / unit; n >= unit; n /= unit {
+	for n := bytesSize / unit; n >= unit; n /= unit {
 		div *= unit
 		exp++
 	}
 	prec := "%." + strconv.Itoa(precision) + "f"
 	if unit_str := "KMGTPE"[exp]; string(unit_str) != "" {
-		return fmt.Sprintf("%s %ciB", fmt.Sprintf(prec, float64(b)/float64(div)), unit_str)
+		return fmt.Sprintf("%s %ciB", fmt.Sprintf(prec, float64(bytesSize)/float64(div)), unit_str)
 	} else {
-		return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(b)/float64(div)), unit_str)
+		return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(bytesSize)/float64(div)), unit_str)
 	}
 }
 
 // 单位之间转换
-func ToKiB(in string, precision int) string {
+func ToKiB(sizeAndUnit string, precision int) string {
 	re := regexp.MustCompile(`^([0-9]+)\s*([a-zA-Z]+)$`)
-	substring := re.FindStringSubmatch(in)
+	substring := re.FindStringSubmatch(sizeAndUnit)
 	if len(substring) == 0 {
 		return ""
 	}
 	size, _ := strconv.ParseInt(substring[1], 10, 64)
-	b := ToBytes(size, substring[2])
+	bytesSize := ToBytes(size, substring[2])
 
 	const unit = 1024
 	div, exp := int64(unit), -1
 	loop := 0
-	for n := b / unit; loop < 1; n /= unit {
+	for n := bytesSize / unit; loop < 1; n /= unit {
 		div *= unit
 		exp++
 		loop++
 	}
 	prec := "%." + strconv.Itoa(precision) + "f"
-	return fmt.Sprintf("%s %ciB", fmt.Sprintf(prec, float64(b)/float64(div)), "KMGTPE"[exp])
+	return fmt.Sprintf("%s %ciB", fmt.Sprintf(prec, float64(bytesSize)/float64(div)), "KMGTPE"[exp])
 }
 
-func ToMiB(in string, precision int) string {
+func ToMiB(sizeAndUnit string, precision int) string {
 	re := regexp.MustCompile(`^([0-9]+)\s*([a-zA-Z]+)$`)
-	substring := re.FindStringSubmatch(in)
+	substring := re.FindStringSubmatch(sizeAndUnit)
 	if len(substring) == 0 {
 		return ""
 	}
 	size, _ := strconv.ParseInt(substring[1], 10, 64)
-	b := ToBytes(size, substring[2])
+	bytesSize := ToBytes(size, substring[2])
 
 	const unit = 1024
 	div, exp := int64(unit), -1
 	loop := 0
-	for n := b / unit; loop < 2; n /= unit {
+	for n := bytesSize / unit; loop < 2; n /= unit {
 		div *= unit
 		exp++
 		loop++
 	}
 	prec := "%." + strconv.Itoa(precision) + "f"
-	return fmt.Sprintf("%s %ciB", fmt.Sprintf(prec, float64(b)/float64(div)), "KMGTPE"[exp])
+	return fmt.Sprintf("%s %ciB", fmt.Sprintf(prec, float64(bytesSize)/float64(div)), "KMGTPE"[exp])
 }
 
-func ToGiB(in string, precision int) string {
+func ToGiB(sizeAndUnit string, precision int) string {
 	re := regexp.MustCompile(`^([0-9]+)\s*([a-zA-Z]+)$`)
-	substring := re.FindStringSubmatch(in)
+	substring := re.FindStringSubmatch(sizeAndUnit)
 	if len(substring) == 0 {
 		return ""
 	}
 	size, _ := strconv.ParseInt(substring[1], 10, 64)
-	b := ToBytes(size, substring[2])
+	bytesSize := ToBytes(size, substring[2])
 
 	const unit = 1024
 	div, exp := int64(unit), -1
 	loop := 0
-	for n := b / unit; loop < 3; n /= unit {
+	for n := bytesSize / unit; loop < 3; n /= unit {
 		div *= unit
 		exp++
 		loop++
 	}
 	prec := "%." + strconv.Itoa(precision) + "f"
-	return fmt.Sprintf("%s %ciB", fmt.Sprintf(prec, float64(b)/float64(div)), "KMGTPE"[exp])
+	return fmt.Sprintf("%s %ciB", fmt.Sprintf(prec, float64(bytesSize)/float64(div)), "KMGTPE"[exp])
 }
 
-func ToTiB(in string, precision int) string {
+func ToTiB(sizeAndUnit string, precision int) string {
 	re := regexp.MustCompile(`^([0-9]+)\s*([a-zA-Z]+)$`)
-	substring := re.FindStringSubmatch(in)
+	substring := re.FindStringSubmatch(sizeAndUnit)
 	if len(substring) == 0 {
 		return ""
 	}
 	size, _ := strconv.ParseInt(substring[1], 10, 64)
-	b := ToBytes(size, substring[2])
+	bytesSize := ToBytes(size, substring[2])
 
 	const unit = 1024
 	div, exp := int64(unit), -1
 	loop := 0
-	for n := b / unit; loop < 4; n /= unit {
+	for n := bytesSize / unit; loop < 4; n /= unit {
 		div *= unit
 		exp++
 		loop++
 	}
 	prec := "%." + strconv.Itoa(precision) + "f"
-	return fmt.Sprintf("%s %ciB", fmt.Sprintf(prec, float64(b)/float64(div)), "KMGTPE"[exp])
+	return fmt.Sprintf("%s %ciB", fmt.Sprintf(prec, float64(bytesSize)/float64(div)), "KMGTPE"[exp])
 }
 
-func ToPiB(in string, precision int) string {
+func ToPiB(sizeAndUnit string, precision int) string {
 	re := regexp.MustCompile(`^([0-9]+)\s*([a-zA-Z]+)$`)
-	substring := re.FindStringSubmatch(in)
+	substring := re.FindStringSubmatch(sizeAndUnit)
 	if len(substring) == 0 {
 		return ""
 	}
 	size, _ := strconv.ParseInt(substring[1], 10, 64)
-	b := ToBytes(size, substring[2])
+	bytesSize := ToBytes(size, substring[2])
 
 	const unit = 1024
 	div, exp := int64(unit), -1
 	loop := 0
-	for n := b / unit; loop < 5; n /= unit {
+	for n := bytesSize / unit; loop < 5; n /= unit {
 		div *= unit
 		exp++
 		loop++
 	}
 	prec := "%." + strconv.Itoa(precision) + "f"
-	return fmt.Sprintf("%s %ciB", fmt.Sprintf(prec, float64(b)/float64(div)), "KMGTPE"[exp])
+	return fmt.Sprintf("%s %ciB", fmt.Sprintf(prec, float64(bytesSize)/float64(div)), "KMGTPE"[exp])
 }
 
-func ToEiB(in string, precision int) string {
+func ToEiB(sizeAndUnit string, precision int) string {
 	re := regexp.MustCompile(`^([0-9]+)\s*([a-zA-Z]+)$`)
-	substring := re.FindStringSubmatch(in)
+	substring := re.FindStringSubmatch(sizeAndUnit)
 	if len(substring) == 0 {
 		return ""
 	}
 	size, _ := strconv.ParseInt(substring[1], 10, 64)
-	b := ToBytes(size, substring[2])
+	bytesSize := ToBytes(size, substring[2])
 
 	const unit = 1024
 	div, exp := int64(unit), -1
 	loop := 0
-	for n := b / unit; loop < 6; n /= unit {
+	for n := bytesSize / unit; loop < 6; n /= unit {
 		div *= unit
 		exp++
 		loop++
 	}
 	prec := "%." + strconv.Itoa(precision) + "f"
-	return fmt.Sprintf("%s %ciB", fmt.Sprintf(prec, float64(b)/float64(div)), "KMGTPE"[exp])
+	return fmt.Sprintf("%s %ciB", fmt.Sprintf(prec, float64(bytesSize)/float64(div)), "KMGTPE"[exp])
 }
 
-func ToKB(in string, precision int) string {
+func ToKB(sizeAndUnit string, precision int) string {
 	re := regexp.MustCompile(`^([0-9]+)\s*([a-zA-Z]+)$`)
-	substring := re.FindStringSubmatch(in)
+	substring := re.FindStringSubmatch(sizeAndUnit)
 	if len(substring) == 0 {
 		return ""
 	}
 	size, _ := strconv.ParseInt(substring[1], 10, 64)
-	b := ToBytes(size, substring[2])
+	bytesSize := ToBytes(size, substring[2])
 
 	const unit = 1000
 	div, exp := int64(unit), -1
 	loop := 0
-	for n := b / unit; loop < 1; n /= unit {
+	for n := bytesSize / unit; loop < 1; n /= unit {
 		div *= unit
 		exp++
 		loop++
 	}
 	prec := "%." + strconv.Itoa(precision) + "f"
-	return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(b)/float64(div)), "KMGTPE"[exp])
+	return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(bytesSize)/float64(div)), "KMGTPE"[exp])
 }
 
-func ToMB(in string, precision int) string {
+func ToMB(sizeAndUnit string, precision int) string {
 	re := regexp.MustCompile(`^([0-9]+)\s*([a-zA-Z]+)$`)
-	substring := re.FindStringSubmatch(in)
+	substring := re.FindStringSubmatch(sizeAndUnit)
 	if len(substring) == 0 {
 		return ""
 	}
 	size, _ := strconv.ParseInt(substring[1], 10, 64)
-	b := ToBytes(size, substring[2])
+	bytesSize := ToBytes(size, substring[2])
 
 	const unit = 1000
 	div, exp := int64(unit), -1
 	loop := 0
-	for n := b / unit; loop < 2; n /= unit {
+	for n := bytesSize / unit; loop < 2; n /= unit {
 		div *= unit
 		exp++
 		loop++
 	}
 	prec := "%." + strconv.Itoa(precision) + "f"
-	return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(b)/float64(div)), "KMGTPE"[exp])
+	return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(bytesSize)/float64(div)), "KMGTPE"[exp])
 }
 
-func ToGB(in string, precision int) string {
+func ToGB(sizeAndUnit string, precision int) string {
 	re := regexp.MustCompile(`^([0-9]+)\s*([a-zA-Z]+)$`)
-	substring := re.FindStringSubmatch(in)
+	substring := re.FindStringSubmatch(sizeAndUnit)
 	if len(substring) == 0 {
 		return ""
 	}
 	size, _ := strconv.ParseInt(substring[1], 10, 64)
-	b := ToBytes(size, substring[2])
+	bytesSize := ToBytes(size, substring[2])
 
 	const unit = 1000
 	div, exp := int64(unit), -1
 	loop := 0
-	for n := b / unit; loop < 3; n /= unit {
+	for n := bytesSize / unit; loop < 3; n /= unit {
 		div *= unit
 		exp++
 		loop++
 	}
 	prec := "%." + strconv.Itoa(precision) + "f"
-	return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(b)/float64(div)), "KMGTPE"[exp])
+	return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(bytesSize)/float64(div)), "KMGTPE"[exp])
 }
 
-func ToTB(in string, precision int) string {
+func ToTB(sizeAndUnit string, precision int) string {
 	re := regexp.MustCompile(`^([0-9]+)\s*([a-zA-Z]+)$`)
-	substring := re.FindStringSubmatch(in)
+	substring := re.FindStringSubmatch(sizeAndUnit)
 	if len(substring) == 0 {
 		return ""
 	}
 	size, _ := strconv.ParseInt(substring[1], 10, 64)
-	b := ToBytes(size, substring[2])
+	bytesSize := ToBytes(size, substring[2])
 
 	const unit = 1000
 	div, exp := int64(unit), -1
 	loop := 0
-	for n := b / unit; loop < 4; n /= unit {
+	for n := bytesSize / unit; loop < 4; n /= unit {
 		div *= unit
 		exp++
 		loop++
 	}
 	prec := "%." + strconv.Itoa(precision) + "f"
-	return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(b)/float64(div)), "KMGTPE"[exp])
+	return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(bytesSize)/float64(div)), "KMGTPE"[exp])
 }
 
-func ToPB(in string, precision int) string {
+func ToPB(sizeAndUnit string, precision int) string {
 	re := regexp.MustCompile(`^([0-9]+)\s*([a-zA-Z]+)$`)
-	substring := re.FindStringSubmatch(in)
+	substring := re.FindStringSubmatch(sizeAndUnit)
 	if len(substring) == 0 {
 		return ""
 	}
 	size, _ := strconv.ParseInt(substring[1], 10, 64)
-	b := ToBytes(size, substring[2])
+	bytesSize := ToBytes(size, substring[2])
 
 	const unit = 1000
 	div, exp := int64(unit), -1
 	loop := 0
-	for n := b / unit; loop < 5; n /= unit {
+	for n := bytesSize / unit; loop < 5; n /= unit {
 		div *= unit
 		exp++
 		loop++
 	}
 	prec := "%." + strconv.Itoa(precision) + "f"
-	return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(b)/float64(div)), "KMGTPE"[exp])
+	return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(bytesSize)/float64(div)), "KMGTPE"[exp])
 }
 
-func ToEB(in string, precision int) string {
+func ToEB(sizeAndUnit string, precision int) string {
 	re := regexp.MustCompile(`^([0-9]+)\s*([a-zA-Z]+)$`)
-	substring := re.FindStringSubmatch(in)
+	substring := re.FindStringSubmatch(sizeAndUnit)
 	if len(substring) == 0 {
 		return ""
 	}
 	size, _ := strconv.ParseInt(substring[1], 10, 64)
-	b := ToBytes(size, substring[2])
+	bytesSize := ToBytes(size, substring[2])
 
 	const unit = 1000
 	div, exp := int64(unit), -1
 	loop := 0
-	for n := b / unit; loop < 6; n /= unit {
+	for n := bytesSize / unit; loop < 6; n /= unit {
 		div *= unit
 		exp++
 		loop++
 	}
 	prec := "%." + strconv.Itoa(precision) + "f"
-	return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(b)/float64(div)), "KMGTPE"[exp])
+	return fmt.Sprintf("%s %cB", fmt.Sprintf(prec, float64(bytesSize)/float64(div)), "KMGTPE"[exp])
 }
