@@ -4,7 +4,7 @@
 # # Created Date: 2023/08/15 09:38:00                                          #
 # # Author: realjf                                                             #
 # # -----                                                                      #
-# # Last Modified: 2023/08/15 09:38:37                                         #
+# # Last Modified: 2023/08/15 11:35:32                                         #
 # # Modified By: realjf                                                        #
 # # -----                                                                      #
 # # Copyright (c) 2023                                                         #
@@ -16,4 +16,9 @@
 test:
 	@go test ./... -v
 
+
+# lint
+.PHONY: lint
+lint:
+	@golangci-lint run -v ./...
 
